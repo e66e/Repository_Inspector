@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: git-repo-inspector
+  Jackson:
+    property-naming-strategy: SNAKE_CASE
+
+server:
+  port: 8080
+
+git:
+  baseurl: "https://api.github.com"

@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/repos/testuser/repo_2/branches"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "name": "main",
+        "commit": {
+          "sha": "85c86e8f939b977bb673f776de00be5d051c2299",
+          "url": "https://api.github.com/repos/testuser/repo_2/commits/85c86e8f939b977bb673f776de00be5d051c2299"
+        },
+        "protected": false
+      }
+    ]
+  }
+}
