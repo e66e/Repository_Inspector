@@ -17,8 +17,8 @@ public class InspectorController {
     private final InspectorService inspectorService;
 
     @GetMapping(value = "/{username}", version = "1")
-    public ResponseEntity<List<Repository>> getReposByUsername(@PathVariable String username) {
-        List<Repository> allNonForkRepos = this.inspectorService.getAllNonForkRepos(username);
+    public ResponseEntity<List<RepositoryDTO>> getReposByUsername(@PathVariable String username) {
+        List<RepositoryDTO> allNonForkRepos = this.inspectorService.getAllNonForkRepos(username);
 
         return ResponseEntity.ok(allNonForkRepos);
     }

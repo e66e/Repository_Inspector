@@ -8,6 +8,7 @@ import java.util.List;
 public record Repository(
         String repositoryName,
         String ownerLogin,
+        boolean isFork,
         List<BranchInfo> branches
 ) {
 
@@ -15,4 +16,7 @@ public record Repository(
         this.branches.addAll(branches);
     }
 
+    public RepositoryDTO mapToDTO() {
+        return new RepositoryDTO(this.repositoryName, this.ownerLogin, this.branches);
+    }
 }

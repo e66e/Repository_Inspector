@@ -24,10 +24,12 @@ public class RepositoryDeserializer extends StdDeserializer<Repository> {
 
         String username = node.at("/owner/login").asString();
         String name = node.get("name").asString();
+        boolean isFork = node.get("fork").asBoolean();
 
         return new Repository(
                 name,
                 username,
+                isFork,
                 new ArrayList<>());
     }
 }

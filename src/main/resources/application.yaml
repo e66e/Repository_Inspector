@@ -14,5 +14,6 @@ spring:
 server:
   port: 8080
 
-git:
+github:
   baseurl: "https://api.github.com"
+  version: "2026-03-10"
