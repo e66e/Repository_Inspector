@@ -1,5 +1,6 @@
 package io.github.e66e.git_repo_inspector;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,6 +19,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(HttpClientErrorException ex){
         String msg = Objects.requireNonNull(ex.getResponseBodyAs(JsonNode.class)).get("message").asString();
         ErrorResponse errorResponse = new ErrorResponse(ex.getStatusCode().value(), msg);
+        return ResponseEntity.status(errorResponse.status()).body(errorResponse);
+    }
+
+    @ExceptionHandler(FetchingBranchesException.class)
+    public ResponseEntity<ErrorResponse> handleException(FetchingBranchesException ex){
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.PARTIAL_CONTENT.value(),
+                ex.getMessage());
         return ResponseEntity.status(errorResponse.status()).body(errorResponse);
     }
 }

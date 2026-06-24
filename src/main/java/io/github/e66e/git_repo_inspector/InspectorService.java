@@ -5,6 +5,7 @@ import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
 import java.util.List;
+import java.util.concurrent.StructuredTaskScope;
 
 @HttpExchange(url = "${github.baseurl}",
         accept = "application/vnd.github+json",
@@ -20,13 +21,21 @@ public interface InspectorService {
 
     default List<RepositoryDTO> getAllNonForkRepos(final String username) {
         List<Repository> repos = getUserRepos(username);
-        repos = repos.parallelStream().filter(repo -> !repo.isFork()).toList();
+        List<Repository> filteredRepos = repos.parallelStream()
+                .filter(repo -> !repo.isFork())
+                .toList();
 
-        repos.parallelStream().forEach(repo -> {
-            List<BranchInfo> branchInfos = this.getBranches(username, repo.repositoryName());
-            repo.addBranches(branchInfos);
-        });
+        try (var scope = StructuredTaskScope.open()) {
+            filteredRepos.forEach(repo ->
+                scope.fork(() -> {
+                    repo.addBranches(getBranches(username, repo.repositoryName()));
+                })
+            );
+            scope.join();
+        } catch (InterruptedException e) {
+            throw new FetchingBranchesException("Error occurred while fetching branches.");
+        }
 
-        return repos.parallelStream().map(Repository::mapToDTO).toList();
+        return filteredRepos.parallelStream().map(Repository::mapToDTO).toList();
     }
 }

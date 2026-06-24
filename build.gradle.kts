@@ -6,6 +6,7 @@ plugins {
 
 group = "io.github.e66e"
 version = "0.0.1-SNAPSHOT"
+val enable_preview = "--enable-preview"
 
 java {
 	toolchain {
@@ -29,8 +30,12 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testAnnotationProcessor("org.projectlombok:lombok")
 }
+tasks.withType<JavaCompile>{
+	options.compilerArgs.add(enable_preview)
+}
 
 tasks.withType<Test> {
 	environment("spring.profiles.active", "test")
 	useJUnitPlatform()
+	jvmArgs(enable_preview)
 }
