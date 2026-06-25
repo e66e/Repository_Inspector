@@ -1,5 +1,6 @@
 package io.github.e66e.git_repo_inspector;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,9 @@ public class InspectorController {
     private final InspectorService inspectorService;
 
     @GetMapping(value = "/{username}", version = "1")
-    public ResponseEntity<List<RepositoryDTO>> getReposByUsername(@PathVariable String username) {
-        List<RepositoryDTO> allNonForkRepos = this.inspectorService.getAllNonForkRepos(username);
+    @JsonView(Views.Public.class)
+    public ResponseEntity<List<Repository>> getReposByUsername(@PathVariable String username) {
+        List<Repository> allNonForkRepos = this.inspectorService.getAllNonForkRepos(username);
 
         return ResponseEntity.ok(allNonForkRepos);
     }

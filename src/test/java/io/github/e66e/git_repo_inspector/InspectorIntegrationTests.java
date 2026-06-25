@@ -17,14 +17,14 @@ import java.util.List;
 @AutoConfigureRestTestClient
 class InspectorIntegrationTests {
 
-    public record RepositoryResponse(
+    record RepositoryResponse(
             String repositoryName,
             String ownerLogin,
             List<BranchInfoResponse> branches
     ) {
     }
 
-    public record BranchInfoResponse(
+    record BranchInfoResponse(
             String name,
             String lastCommitSha
     ) {}

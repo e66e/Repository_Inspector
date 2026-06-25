@@ -3,9 +3,17 @@ spring:
     name: git-repo-inspector
   Jackson:
     property-naming-strategy: SNAKE_CASE
+  mvc:
+    apiversion:
+      use:
+        header: X-API-Version
+      supported:
+        - 1
+      default: 1
 
 server:
   port: 8080
 
-git:
+github:
   baseurl: "http://localhost:8081"
+  version: "2026-03-10"

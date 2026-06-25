@@ -22,7 +22,7 @@ public interface InspectorService {
     List<BranchInfo> getBranches(@PathVariable String username, @PathVariable String repo)
             throws RestClientResponseException;
 
-    default List<RepositoryDTO> getAllNonForkRepos(final String username) {
+    default List<Repository> getAllNonForkRepos(final String username) {
         List<Repository> repos = getUserRepos(username);
         List<Repository> filteredRepos = repos.parallelStream()
                 .filter(repo -> !repo.isFork())
@@ -37,6 +37,6 @@ public interface InspectorService {
             throw new FetchingBranchesException("Error occurred while fetching branches.");
         }
 
-        return filteredRepos.parallelStream().map(Repository::mapToDTO).toList();
+        return filteredRepos;
     }
 }
