@@ -1,6 +1,7 @@
 package io.github.e66e.git_repo_inspector;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
@@ -14,10 +15,12 @@ import java.util.concurrent.StructuredTaskScope;
 public interface InspectorService {
 
     @GetExchange("/users/{username}/repos")
-    List<Repository> getUserRepos(@PathVariable String username);
+    List<Repository> getUserRepos(@PathVariable String username)
+            throws RestClientResponseException;
 
     @GetExchange("/repos/{username}/{repo}/branches")
-    List<BranchInfo> getBranches(@PathVariable String username, @PathVariable String repo);
+    List<BranchInfo> getBranches(@PathVariable String username, @PathVariable String repo)
+            throws RestClientResponseException;
 
     default List<RepositoryDTO> getAllNonForkRepos(final String username) {
         List<Repository> repos = getUserRepos(username);
@@ -27,9 +30,7 @@ public interface InspectorService {
 
         try (var scope = StructuredTaskScope.open()) {
             filteredRepos.forEach(repo ->
-                scope.fork(() -> {
-                    repo.addBranches(getBranches(username, repo.repositoryName()));
-                })
+                scope.fork(() -> repo.addBranches(getBranches(username, repo.repositoryName())))
             );
             scope.join();
         } catch (InterruptedException e) {

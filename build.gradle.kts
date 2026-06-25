@@ -22,6 +22,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	implementation("org.springframework.boot:spring-boot-restclient")
 	implementation("org.wiremock.integrations:wiremock-spring-boot:4.0.9")
+	implementation("org.jspecify:jspecify:1.0.0")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
